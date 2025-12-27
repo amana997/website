@@ -1,0 +1,48 @@
+https://3q3c4z5r71.execute-api.ap-south-1.amazonaws.com/prod
+
+curl "https://3q3c4z5r71.execute-api.ap-south-1.amazonaws.com/prod/products"
+
+aws s3api put-object --bucket asha-home-products-catalog --key products/rangoli
+
+
+aws dynamodb put-item \
+    --table-name products \
+    --item '{"product_id": {"S": "1"}, "name": {"S": "Aman"}, "price": {"N": "900"}, "description": {"S": "skdfjhg"}, "image_url": {"S": "https://asha-home-products-catalog.s3.ap-south-1.amazonaws.com/products/Product1.jpeg"}}'
+
+
+
+aws s3api put-object --bucket asha-home-products-catalog --key products/bandhanwar/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shubhlabh/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/dogad/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/ukhalmusal/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/chak/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/zawli/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/supa/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/thapa/
+aws s3api put-object --bucket asha-home-products-catalog --key products/ringceremony/platter/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/platter/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/gudPacking/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/nariyalPali/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/mangodiMat/
+aws s3api put-object --bucket asha-home-products-catalog --key products/shadiItem/chauk/
+
+
+
+#############################
+# For uploading and tagging #
+#############################
+aws s3api put-object \
+  --bucket asha-home-products-catalog \
+  --key products/rangoli-002.jpeg \
+  --body ~/Downloads/rangoli/rangoli-002.jpeg \
+  --tagging "name=rangoli&description=check&price=700&image_url=https://asha-home-products-catalog.s3.ap-south-1.amazonaws.com/products/rangoli-002.jpeg"
+
+
+###############
+# For tagging *
+###############
+aws s3api put-object-tagging \
+  --bucket asha-home-products-catalog \
+  --key products/rangoli/rangoli-001.jpeg \
+  --tagging 'TagSet=[{Key=name,Value=rangoli},{Key=description,Value=check},{Key=price,Value=700},{Key=image_url,Value=https://asha-home-products-catalog.s3.ap-south-1.amazonaws.com/products/rangoli/rangoli-001.jpeg}]'
