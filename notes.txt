@@ -46,3 +46,16 @@ aws s3api put-object-tagging \
   --bucket asha-home-products-catalog \
   --key products/rangoli/rangoli-001.jpeg \
   --tagging 'TagSet=[{Key=name,Value=rangoli},{Key=description,Value=check},{Key=price,Value=700},{Key=image_url,Value=https://asha-home-products-catalog.s3.ap-south-1.amazonaws.com/products/rangoli/rangoli-001.jpeg}]'
+
+aws cloudfront create-invalidation \
+  --distribution-id E2ATHLWD0GBHLQ \
+  --paths "/index.html"
+
+aws cloudfront get-distribution-config \
+  --id E2ATHLWD0GBHLQ \
+  --output json > cf.json
+
+aws cloudfront update-distribution \
+  --id E2ATHLWD0GBHLQ \
+  --if-match E1PZVUL14MEIAA \
+  --distribution-config file://dist-config.json

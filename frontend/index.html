@@ -3,15 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <title>Archi's Creations</title>
+
+  <!-- Important for proper mobile scaling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    #search { margin-bottom: 20px; padding: 8px; width: 300px; }
-    .product { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; width: 250px; display: inline-block; vertical-align: top; }
-    .product img { width: 100%; height: auto; }
-    .cart { margin-top: 20px; font-weight: bold; }
-    button { padding: 5px 10px; margin-top: 10px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.5;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    #search {
+      margin-bottom: 20px;
+      padding: 12px;
+      width: 300px;
+      max-width: 100%;
+      font-size: 1rem;
+    }
+
+    /* Product container */
+    #product-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-bottom: 80px; /* space for fixed cart */
+    }
+
+    /* Desktop product card */
+    .product {
+      border: 1px solid #ddd;
+      padding: 15px;
+      width: 250px;
+      box-sizing: border-box;
+      background: #fafafa;
+      border-radius: 8px;
+    }
+
+    .product h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .product img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .product p {
+      margin: 6px 0;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 12px;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Fixed cart */
+    .cart {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      border-top: 1px solid #ccc;
+      padding: 14px 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-align: right;
+      z-index: 1000;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+
+    /* ✅ ALL MOBILE SCREENS */
+    @media (max-width: 768px) {
+      #product-list {
+        flex-direction: column;
+      }
+
+      .product {
+        width: 100%;   /* 1 product per line */
+        font-size: 1.1rem;
+        padding: 20px;
+      }
+
+      .product h3 {
+        font-size: 1.4rem;
+      }
+
+      .product p {
+        font-size: 1.1rem;
+      }
+
+      #search {
+        width: 100%;
+        font-size: 1.1rem;
+      }
+
+      .cart {
+        font-size: 1.2rem;
+        padding: 12px 16px;
+      }
+    }
+
+    /* Extra small phones */
+    @media (max-width: 360px) {
+      .cart {
+        font-size: 1.05rem;
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <h1>Archi's Creations</h1>
@@ -25,33 +146,29 @@
   </div>
 
   <script>
-    const BASE_URL = "https://3q3c4z5r71.execute-api.ap-south-1.amazonaws.com/prod"; // replace with your API Gateway URL
+    const BASE_URL = "https://3q3c4z5r71.execute-api.ap-south-1.amazonaws.com/prod";
 
     let cartTotal = 0;
 
-    // Fetch products from API
     async function fetchProducts(search = "") {
       try {
         let url = `${BASE_URL}/products`;
         if (search) url += `?search=${encodeURIComponent(search)}`;
 
         const res = await fetch(url);
-        if (!res.ok) throw new Error("Failed to fetch products");
         const products = await res.json();
-
         displayProducts(products);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        document.getElementById("product-list").innerHTML = "<p>Unable to load products.</p>";
+      } catch {
+        document.getElementById("product-list").innerHTML =
+          "<p>Unable to load products.</p>";
       }
     }
 
-    // Display products
     function displayProducts(products) {
       const container = document.getElementById("product-list");
       container.innerHTML = "";
 
-      if (products.length === 0) {
+      if (!products.length) {
         container.innerHTML = "<p>No products found.</p>";
         return;
       }
@@ -61,27 +178,24 @@
         div.className = "product";
         div.innerHTML = `
           <h3>${p.name}</h3>
-          <img src="${p.image_url || 'https://via.placeholder.com/150'}" alt="${p.name}" />
-          <p>${p.description || ''}</p>
-          <p>Price: ₹${p.price}</p>
+          <img src="${p.image_url || 'https://via.placeholder.com/300'}">
+          <p>${p.description || ""}</p>
+          <p><b>Price:</b> ₹${p.price}</p>
           <button onclick="addToCart(${p.price})">Add to Cart</button>
         `;
         container.appendChild(div);
       });
     }
 
-    // Add to cart
     function addToCart(price) {
       cartTotal += price;
       document.getElementById("cart-total").textContent = cartTotal;
     }
 
-    // Search functionality
-    document.getElementById("search").addEventListener("input", (e) => {
+    document.getElementById("search").addEventListener("input", e => {
       fetchProducts(e.target.value);
     });
 
-    // Initial fetch
     fetchProducts();
   </script>
 
