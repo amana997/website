@@ -7,7 +7,6 @@ variable "aws_region" {
 variable "website_bucket_name" {
   description = "S3 bucket name for static website"
   type        = string
-  default     = asha-home-products-catalog
 }
 
 variable "dynamodb_table_name" {

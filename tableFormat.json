@@ -1,0 +1,17 @@
+{
+  "product_id": {
+    "S": "1"
+  },
+  "image_url": {
+    "S": "https://asha-home-products-catalog.s3.ap-south-1.amazonaws.com/products/Product1.jpeg"
+  },
+  "name": {
+    "S": "Test"
+  },
+  "price": {
+    "N": "499"
+  },
+  "description": {
+    "S": "testing"
+  }
+}
