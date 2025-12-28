@@ -1,203 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Archi's Creations</title>
+<meta charset="UTF-8">
+<title>Archi's Creations</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Important for proper mobile scaling -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.5;
-    }
+  h1 { font-size: 2rem; }
 
-    h1 {
-      font-size: 2rem;
-    }
+  /* Categories */
+  #categories {
+    margin-bottom: 20px;
+  }
 
-    #search {
-      margin-bottom: 20px;
-      padding: 12px;
-      width: 300px;
-      max-width: 100%;
-      font-size: 1rem;
-    }
+  #categories button {
+    padding: 8px 14px;
+    margin: 5px 5px 5px 0;
+    border-radius: 20px;
+    border: 1px solid #007bff;
+    background: white;
+    color: #007bff;
+    cursor: pointer;
+  }
 
-    /* Product container */
-    #product-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding-bottom: 80px; /* space for fixed cart */
-    }
+  #categories button.active {
+    background: #007bff;
+    color: white;
+  }
 
-    /* Desktop product card */
-    .product {
-      border: 1px solid #ddd;
-      padding: 15px;
-      width: 250px;
-      box-sizing: border-box;
-      background: #fafafa;
-      border-radius: 8px;
-    }
+  /* Products */
+  #product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 150px;
+  }
 
-    .product h3 {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
+  .product {
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: 250px;
+    background: #fafafa;
+    border-radius: 8px;
+  }
 
-    .product img {
-      width: 100%;
-      height: auto;
-      border-radius: 6px;
-    }
+  .product img {
+    width: 100%;
+    border-radius: 6px;
+  }
 
-    .product p {
-      margin: 6px 0;
-      font-size: 1rem;
-    }
+  .qty {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+  }
 
-    button {
-      padding: 12px;
-      width: 100%;
-      margin-top: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 6px;
-    }
+  .qty button {
+    padding: 6px 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
 
-    button:hover {
-      background-color: #0056b3;
-    }
+  /* Cart */
+  .cart {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid #ccc;
+    padding: 14px 16px;
+    box-sizing: border-box;
+  }
 
-    /* Fixed cart */
-    .cart {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: white;
-      border-top: 1px solid #ccc;
-      padding: 14px 20px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      text-align: right;
-      z-index: 1000;
-      box-sizing: border-box;
-      white-space: nowrap;
-    }
+  .cart-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
 
-    /* ✅ ALL MOBILE SCREENS */
-    @media (max-width: 768px) {
-      #product-list {
-        flex-direction: column;
-      }
+  .whatsapp {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
 
-      .product {
-        width: 100%;   /* 1 product per line */
-        font-size: 1.1rem;
-        padding: 20px;
-      }
+  .whatsapp:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
 
-      .product h3 {
-        font-size: 1.4rem;
-      }
-
-      .product p {
-        font-size: 1.1rem;
-      }
-
-      #search {
-        width: 100%;
-        font-size: 1.1rem;
-      }
-
-      .cart {
-        font-size: 1.2rem;
-        padding: 12px 16px;
-      }
-    }
-
-    /* Extra small phones */
-    @media (max-width: 360px) {
-      .cart {
-        font-size: 1.05rem;
-      }
-    }
-  </style>
+  /* Mobile */
+  @media (max-width: 768px) {
+    #product-list { flex-direction: column; }
+    .product { width: 100%; }
+    .cart-content { flex-direction: column; align-items: flex-start; }
+    .whatsapp { width: 100%; }
+  }
+</style>
 </head>
 
 <body>
 
-  <h1>Archi's Creations</h1>
+<h1>Archi's Creations</h1>
 
-  <input type="text" id="search" placeholder="Search products..." />
+<div id="categories"></div>
+<div id="product-list"></div>
 
-  <div id="product-list"></div>
-
-  <div class="cart">
-    Total: ₹<span id="cart-total">0</span>
+<div class="cart">
+  <div class="cart-content">
+    <div>
+      Total: ₹<span id="cart-total">0</span>
+    </div>
+    <button id="waBtn" class="whatsapp" disabled onclick="enquireOnWhatsApp()">
+      Enquire on WhatsApp
+    </button>
   </div>
+</div>
 
-  <script>
-    const BASE_URL = "https://3q3c4z5r71.execute-api.ap-south-1.amazonaws.com/prod";
+<script>
+  const BASE_URL = "https://3q3c4z5r71.execute-api.ap-south-1.amazonaws.com/prod";
+  const CATEGORY_KEY = "category";
+  const WHATSAPP_NUMBER = "917000496665"; // 🔴 CHANGE THIS
 
-    let cartTotal = 0;
+  let allProducts = [];
+  let cart = {}; // { productName: { price, qty } }
+  let activeCategory = "ALL";
 
-    async function fetchProducts(search = "") {
-      try {
-        let url = `${BASE_URL}/products`;
-        if (search) url += `?search=${encodeURIComponent(search)}`;
+  async function fetchProducts() {
+    const res = await fetch(`${BASE_URL}/products`);
+    allProducts = await res.json();
+    buildCategories();
+    displayProducts(allProducts);
+  }
 
-        const res = await fetch(url);
-        const products = await res.json();
-        displayProducts(products);
-      } catch {
-        document.getElementById("product-list").innerHTML =
-          "<p>Unable to load products.</p>";
-      }
-    }
+  function buildCategories() {
+    const container = document.getElementById("categories");
+    container.innerHTML = "";
 
-    function displayProducts(products) {
-      const container = document.getElementById("product-list");
-      container.innerHTML = "";
+    const cats = ["ALL", ...new Set(allProducts.map(p => p[CATEGORY_KEY]))];
+    cats.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.textContent = cat;
+      btn.className = cat === activeCategory ? "active" : "";
+      btn.onclick = () => {
+        activeCategory = cat;
+        highlight();
+        filterProducts();
+      };
+      container.appendChild(btn);
+    });
+  }
 
-      if (!products.length) {
-        container.innerHTML = "<p>No products found.</p>";
-        return;
-      }
+  function highlight() {
+    document.querySelectorAll("#categories button").forEach(b =>
+      b.classList.toggle("active", b.textContent === activeCategory)
+    );
+  }
 
-      products.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "product";
-        div.innerHTML = `
-          <h3>${p.name}</h3>
-          <img src="${p.image_url || 'https://via.placeholder.com/300'}">
-          <p>${p.description || ""}</p>
-          <p><b>Price:</b> ₹${p.price}</p>
-          <button onclick="addToCart(${p.price})">Add to Cart</button>
-        `;
-        container.appendChild(div);
-      });
-    }
+  function filterProducts() {
+    displayProducts(
+      activeCategory === "ALL"
+        ? allProducts
+        : allProducts.filter(p => p[CATEGORY_KEY] === activeCategory)
+    );
+  }
 
-    function addToCart(price) {
-      cartTotal += price;
-      document.getElementById("cart-total").textContent = cartTotal;
-    }
+  function displayProducts(products) {
+    const container = document.getElementById("product-list");
+    container.innerHTML = "";
 
-    document.getElementById("search").addEventListener("input", e => {
-      fetchProducts(e.target.value);
+    products.forEach(p => {
+      const qty = cart[p.name]?.qty || 0;
+
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <h3>${p.name}</h3>
+        <img src="${p.image_url || 'https://via.placeholder.com/300'}">
+        <p>${p.description || ""}</p>
+        <p><b>Price:</b> ₹${p.price}</p>
+
+        <div class="qty">
+          <button onclick="updateQty('${p.name}', ${p.price}, -1)">➖</button>
+          <span>${qty}</span>
+          <button onclick="updateQty('${p.name}', ${p.price}, 1)">➕</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function updateQty(name, price, change) {
+    cart[name] = cart[name] || { price, qty: 0 };
+    cart[name].qty += change;
+
+    if (cart[name].qty <= 0) delete cart[name];
+    updateCartUI();
+    filterProducts();
+  }
+
+  function updateCartUI() {
+    let total = 0;
+    Object.values(cart).forEach(i => {
+      total += i.price * i.qty;
     });
 
-    fetchProducts();
-  </script>
+    document.getElementById("cart-total").textContent = total;
+    document.getElementById("waBtn").disabled = total === 0;
+  }
+
+  function enquireOnWhatsApp() {
+    let message = "Hello, I would like to enquire about the following products:\n\n";
+    let total = 0;
+
+    for (const [name, item] of Object.entries(cart)) {
+      message += `${name} x ${item.qty} = ₹${item.price * item.qty}\n`;
+      total += item.price * item.qty;
+    }
+
+    message += `\nTotal Amount: ₹${total}`;
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+
+  fetchProducts();
+</script>
 
 </body>
 </html>
