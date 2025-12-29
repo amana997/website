@@ -1,0 +1,13 @@
+#commands to update the tags
+
+#Rangoli
+aws s3api put-object-tagging \
+  --bucket asha-home-products-catalog \
+  --key products/rangoli/rangoli-001.jpeg \
+  --tagging 'TagSet=[{Key=name,Value=Rangoli-01},{Key=description,Value=Rangoli which can be arranged as per your choice},{Key=price,Value=2500},{Key=category,Value=Rangoli},{Key=image_url,Value=https://asha-home-products-catalog.s3.ap-south-1.amazonaws.com/products/rangoli/rangoli-001.jpeg}]'
+
+#Thali
+aws s3api put-object-tagging \
+  --bucket asha-home-products-catalog \
+  --key products/thali/thali-001.jpeg \
+  --tagging 'TagSet=[{Key=name,Value=Thali-01},{Key=description,Value=Thali},{Key=price,Value=1400},{Key=category,Value=Thali},{Key=image_url,Value=https://asha-home-products-catalog.s3.ap-south-1.amazonaws.com/products/thali/thali-001.jpeg}]'
