@@ -35,6 +35,11 @@ resource "aws_iam_role_policy" "lambda_policy" {
         Effect = "Allow"
         Action = "dynamodb:PutItem"
         Resource = data.aws_dynamodb_table.existing.arn
+      },
+      {
+        Effect = "Allow"
+        Action = "dynamodb:DeleteItem"
+        Resource = data.aws_dynamodb_table.existing.arn
       }
     ]
   })

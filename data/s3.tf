@@ -5,6 +5,7 @@ resource "aws_s3_bucket_notification" "notify_lambda" {
     lambda_function_arn = aws_lambda_function.tag_to_dynamodb.arn
     events = [
       "s3:ObjectCreated:*",
+      "s3:ObjectRemoved:*",
       "s3:ObjectTagging:Put"
     ]
   }

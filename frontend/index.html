@@ -6,65 +6,112 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+  /* 🌸 Handmade Festive Background */
   body {
-    font-family: Arial, sans-serif;
+    font-family: "Trebuchet MS", Arial, sans-serif;
     margin: 20px;
+    background:
+      radial-gradient(circle at top left, #fff1e6, transparent 60%),
+      radial-gradient(circle at bottom right, #fde2e4, transparent 60%),
+      linear-gradient(135deg, #fffaf3, #fdf1e7);
   }
 
-  h1 { font-size: 2rem; }
+  /* 🎨 Animated Brand Header */
+  h1 {
+    font-size: 3.2rem;
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+    font-weight: bold;
+
+    background: linear-gradient(
+      270deg,
+      #8b1e3f,
+      #c44536,
+      #e6a756,
+      #8b1e3f
+    );
+    background-size: 600% 600%;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: glowMove 6s ease infinite;
+    text-shadow:
+      0 0 12px rgba(230,167,86,0.45),
+      0 0 24px rgba(196,69,54,0.35);
+  }
+
+  @keyframes glowMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
   /* Categories */
   #categories {
     margin-bottom: 20px;
+    text-align: center;
   }
 
   #categories button {
-    padding: 8px 14px;
-    margin: 5px 5px 5px 0;
-    border-radius: 20px;
-    border: 1px solid #007bff;
-    background: white;
-    color: #007bff;
+    padding: 8px 16px;
+    margin: 6px;
+    border-radius: 22px;
+    border: 1px solid #8b1e3f;
+    background: #fff;
+    color: #8b1e3f;
     cursor: pointer;
+    font-weight: 500;
   }
 
   #categories button.active {
-    background: #007bff;
-    color: white;
+    background: #8b1e3f;
+    color: #fff;
   }
 
   /* Products */
   #product-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    padding-bottom: 150px;
+    gap: 22px;
+    padding-bottom: 160px;
+    justify-content: center;
   }
 
   .product {
-    border: 1px solid #ddd;
-    padding: 15px;
+    border: 1px solid #e4cfa7;
+    padding: 16px;
     width: 250px;
-    background: #fafafa;
-    border-radius: 8px;
+    background: #fffdf9;
+    border-radius: 14px;
+    box-shadow: 0 6px 14px rgba(139,30,63,0.12);
+  }
+
+  .product h3 {
+    color: #8b1e3f;
   }
 
   .product img {
     width: 100%;
-    border-radius: 6px;
+    border-radius: 10px;
   }
 
   .qty {
     display: flex;
     gap: 10px;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 12px;
   }
 
   .qty button {
-    padding: 6px 12px;
+    padding: 6px 14px;
     font-size: 1.1rem;
     cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid #c44536;
+    background: #fde2e4;
+    color: #8b1e3f;
   }
 
   /* Cart */
@@ -73,31 +120,33 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background: white;
-    border-top: 1px solid #ccc;
+    background: #fffaf3;
+    border-top: 2px solid #e6a756;
     padding: 14px 16px;
     box-sizing: border-box;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.12);
   }
 
   .cart-content {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 14px;
     align-items: center;
+    justify-content: space-between;
   }
 
   .whatsapp {
-    background: #25D366;
+    background: linear-gradient(135deg, #25D366, #1da851);
     color: white;
     border: none;
-    padding: 10px 14px;
-    border-radius: 6px;
+    padding: 10px 18px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 1rem;
   }
 
   .whatsapp:disabled {
-    background: #aaa;
+    background: #bbb;
     cursor: not-allowed;
   }
 
@@ -121,7 +170,7 @@
 <div class="cart">
   <div class="cart-content">
     <div>
-      Total: ₹<span id="cart-total">0</span>
+      <b>Total:</b> ₹<span id="cart-total">0</span>
     </div>
     <button id="waBtn" class="whatsapp" disabled onclick="enquireOnWhatsApp()">
       Enquire on WhatsApp
@@ -132,10 +181,10 @@
 <script>
   const BASE_URL = "https://3q3c4z5r71.execute-api.ap-south-1.amazonaws.com/prod";
   const CATEGORY_KEY = "category";
-  const WHATSAPP_NUMBER = "917000496665"; // 🔴 CHANGE THIS
+  const WHATSAPP_NUMBER = "917000496665";
 
   let allProducts = [];
-  let cart = {}; // { productName: { price, qty } }
+  let cart = {};
   let activeCategory = "ALL";
 
   async function fetchProducts() {
@@ -213,10 +262,7 @@
 
   function updateCartUI() {
     let total = 0;
-    Object.values(cart).forEach(i => {
-      total += i.price * i.qty;
-    });
-
+    Object.values(cart).forEach(i => total += i.price * i.qty);
     document.getElementById("cart-total").textContent = total;
     document.getElementById("waBtn").disabled = total === 0;
   }
@@ -231,9 +277,7 @@
     }
 
     message += `\nTotal Amount: ₹${total}`;
-
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
   }
 
   fetchProducts();
