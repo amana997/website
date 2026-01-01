@@ -50,7 +50,7 @@ aws s3api put-object-tagging \
 
 aws cloudfront create-invalidation \
   --distribution-id E2ATHLWD0GBHLQ \
-  --paths "/index.html"
+  --paths "/*"
 
 aws cloudfront get-distribution-config \
   --id E2ATHLWD0GBHLQ \
